@@ -1,3 +1,3 @@
-[Dado](Covicake.github.io/ejerciciosJavascript/dado/index.html)
+[Dado](dado/index.html)
 
-[Bingo](Covicake.github.io/ejerciciosJavascript/bingo/index.html)
+[Bingo](bingo/index.html)
