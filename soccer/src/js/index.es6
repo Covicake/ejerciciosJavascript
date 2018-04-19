@@ -5,30 +5,35 @@ let elems = {
 
 elems.boton.onclick = nuevoPartido;
 
-let equipos = ["Alaves", "Athletic Bilbao", "Athletico Madrid", "Barcelona", "Celta de Vigo", "Deportivo La Coruña", "Eibar", "Espanyol", "Getafe", "Girona"];
+/*let partidos =[
+  {equipoA: "", equipoB: "", resultado = []}, //Resultado ["1", "5"] (Goles equipoA, Goles equipoB).
+  {equipoA: "", equipoB: "", resultado = []},
+  {equipoA: "", equipoB: "", resultado = []},
+  {equipoA: "", equipoB: "", resultado = []},
+  {equipoA: "", equipoB: "", resultado = []}
+]; */
+
+let equipos = [
+  {nombre: "Alaves", goles = ""},
+  {nombre: "Athletic Bilbao", goles = ""},
+  {nombre: "Athletico Madrid", goles = ""},
+  {nombre: "Barcelona", goles = ""},
+  {nombre: "Celta de Vigo", goles = ""},
+  {nombre: "Deportivo La Coruña", goles = ""},
+  {nombre: "Eibar", goles = ""},
+  {nombre: "Espanyol", goles = ""},
+  {nombre: "Getafe", goles = ""},
+  {nombre: "Girona", goles = ""}
+];
+
 let equiposRestantes;
 let posiblesResultados;
 
-let equipoA = {
-  nombre: "",
-  goles: ""
-}
+function decidirPartidos(){
 
-let equipoB = {
-  nombre: "",
-  goles: ""
-}
-
-let resultado;
-
-function generarProbabilidades(){
-  let ceros = _.fill(Array(7), 0);
-  let unos = _.fill(Array(6), 1);
-  let dos = _.fill(Array(5), 2);
-  let tres = _.fill(Array(4), 3);
-  posiblesResultados = _.concat(ceros, unos, dos, tres);
-  posiblesResultados = _.concat(posiblesResultados, [4, 5, 6, 7, 8, 9]);
-  posiblesResultados = _.shuffle(posiblesResultados);
+  for(let i in _.range(0, (equipos.length/2)+1)){
+    partidos.push({equipoA: elegirEquipo(), equipoB: elegirEquipo(), resultado = decidirGanador(equipoA, equipoB)});
+  }
 }
 
 function elegirEquipo(){
@@ -36,10 +41,14 @@ function elegirEquipo(){
    return equipo;
 }
 
-function decidirGanador(){
-  //let ganador = Math.round(Math.random());  //0 o 1
-  //decidirGoles(ganador);
-  decidirGoles();
+function decidirGanador(equipoA, equipoB){
+  let ind = Math.floor(Math.random()*posiblesResultados.length);
+  let ind2 = Math.floor(Math.random()*posiblesResultados.length);
+
+  equipoA.goles = posiblesResultados[ind];
+  equipoB.goles = posiblesResultados[ind2];
+
+  return [equipoA.goles, equipoB.goles];
 }
 
 /*function decidirGoles(ganador){
@@ -53,19 +62,22 @@ function decidirGanador(){
   }
 } */
 
-function decidirGoles(ganador){
-  let ind = Math.floor(Math.random()*posiblesResultados.length);
-  let ind2 = Math.floor(Math.random()*posiblesResultados.length);
-
-  equipoA.goles = posiblesResultados[ind];
-  equipoB.goles = posiblesResultados[ind2];
-}
-
 function nuevoPartido(){
   equiposRestantes = _.shuffle(equipos);
-  equipoA.nombre = elegirEquipo();
-  equipoB.nombre = elegirEquipo();
+  decidirPartidos();
   generarProbabilidades()
   decidirGanador();
   elems.partido.textContent = `${equipoA.nombre} ${equipoA.goles} - ${equipoB.nombre}-${equipoB.goles}`
+}
+
+
+
+function generarProbabilidades(){
+  let ceros = _.fill(Array(7), 0);
+  let unos = _.fill(Array(6), 1);
+  let dos = _.fill(Array(5), 2);
+  let tres = _.fill(Array(4), 3);
+  posiblesResultados = _.concat(ceros, unos, dos, tres);
+  posiblesResultados = _.concat(posiblesResultados, [4, 5, 6, 7, 8, 9]);
+  posiblesResultados = _.shuffle(posiblesResultados);
 }
