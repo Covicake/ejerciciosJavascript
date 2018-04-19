@@ -1,0 +1,137 @@
+// out:  ../../dist/css/index.min.css, compress: true, autoprefixer: true
+
+.dimensiones(@wid, @heig){
+  width: @wid;
+  height: @heig;
+}
+
+.setFlex(@disp, @just, @alig, @direc){
+  display: @disp;
+  justify-content: @just;
+  align-items: @alig;
+  flex-direction: @direc;
+}
+
+.contenedor{
+  .setFlex(flex, flex-start, center, column);
+}
+
+.stats{
+  .setFlex(flex, center, center, row);
+}
+
+#historial{
+  .dimensiones(200px, 280px);
+  .setFlex(flex, center, flex-start, row);
+  margin: 20px 0px 0px 0px;
+  border: 2px solid grey;
+  flex-wrap: wrap;
+  font-size: 20px;
+  border-right: 2px solid red;
+}
+
+#estadisticas{
+  .dimensiones(200px, 280px);
+  .setFlex(flex, center, flex-start, column);
+  margin: 20px 0px 0px 0px;
+  border: 2px solid grey;
+  font-size: 36px;
+  border-left: 2px solid red;
+}
+
+#Resultado{
+  .dimensiones(200px, 200px);
+  .setFlex(flex, center, flex-start, column);
+  border: 3px solid grey;
+  font-size: 60px;
+}
+
+#uno{
+  .dimensiones(200px, 200px);
+  .setFlex(none, center, center, row);
+}
+
+#dos{
+  .dimensiones(200px, 200px);
+  .setFlex(none, space-around, center, row);
+}
+
+#tres{
+  .dimensiones(160px, 200px);
+  .setFlex(none, space-between, flex-start, column);
+  margin: 20px 0px 20px 20px;
+
+  .linea1{
+    align-self: flex-end;
+  }
+  .linea2{
+    align-self: center;
+  }
+  .linea3{
+    align-self: flex-start;
+  }
+}
+
+#cuatro{
+  .dimensiones(160px, 200px);
+  .setFlex(none, space-between, space-between, row);
+  margin: 20px 0px 20px 20px;
+
+  .linea1{
+    align-self: space-between;
+    .setFlex(flex, space-between, flex-start, column);
+  }
+  .linea3{
+    .setFlex(flex, space-between, flex-start, column);
+    align-self: space-between;
+  }
+}
+
+#cinco{
+  .dimensiones(160px, 200px);
+  .setFlex(none, space-between, center, column);
+  margin: 20px 0px 20px 20px;
+
+  .linea1{
+    .setFlex(flex, space-between, flex-start, row);
+    width: 160px;
+  }
+  .linea3{
+    .setFlex(flex, space-between, flex-start, row);
+    width: 160px;
+  }
+}
+
+#seis{
+  .dimensiones(200px, 200px);
+  .setFlex(none, space-between, flex-start, column);
+  margin: 20px 0px 20px 20px;
+
+  .linea1{
+    width: 160px;
+    .setFlex(flex, space-between, flex-start, row);
+
+  }
+
+  .linea2{
+    width: 160px;
+    .setFlex(flex, space-between, flex-start, row);
+  }
+
+  .linea3{
+    width: 160px;
+    .setFlex(flex, space-between, flex-start, row);
+  }
+}
+
+.bola{
+  .dimensiones(20px, 20px);
+  border-radius: 80px;
+  background: black;
+}
+
+.boton{
+  .dimensiones(200px, 50px);
+  background: grey;
+  font-size: 20px;
+}

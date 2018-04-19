@@ -1,0 +1,95 @@
+// out:  ../../dist/css/index.min.css, compress: true, autoprefixer: true
+
+@carton-col: #d7dee8;
+@center-col: #e6eaf2;
+
+.dimensiones(@wid, @heig){
+  width: @wid;
+  height: @heig;
+}
+
+.setFlex(@just, @alig, @direc){
+  display: flex;
+  justify-content: @just;
+  align-items: @alig;
+  flex-direction: @direc;
+}
+
+.contenedor{
+  .dimensiones(800px, 400px);
+  .setFlex(space-between, center, row);
+  margin: auto;
+  border: 2px solid @carton-col;
+}
+
+.carton{
+  .dimensiones(250px, 350px);
+  .setFlex(flex-start, center, column);
+  background: @carton-col;
+  background:
+		linear-gradient(135deg, transparent 10px, @carton-col 0) top left,
+		linear-gradient(225deg, @carton-col 10px, @carton-col 0) top right,
+		linear-gradient(315deg, @carton-col 10px, @carton-col 0) bottom right,
+		linear-gradient(45deg,  transparent 10px, @carton-col 0) bottom left;
+	background-size: 60% 50%;
+	background-repeat: no-repeat;
+}
+
+.cpu{  /*Herencia de carton para modificar linear-gradient.*/
+  background:
+		linear-gradient(135deg, @carton-col 10px, @carton-col 0) top left,
+		linear-gradient(225deg, transparent 10px, @carton-col 0) top right,
+		linear-gradient(315deg, transparent 10px, @carton-col 0) bottom right,
+		linear-gradient(45deg,  @carton-col 10px, @carton-col 0) bottom left;
+	background-size: 60% 50%;
+	background-repeat: no-repeat;
+}
+
+.textoCarton{
+  margin-top: 20px;
+  font-size: 22px;
+}
+
+.numeros{
+  .dimensiones(78%, 65%);
+  .setFlex(space-between, center, row);
+  margin-top: 25px;
+  padding: 10px;
+  flex-wrap: wrap;
+  font-size: 20px;
+
+}
+
+.numero{
+  .dimensiones(30px, 30px);
+  .setFlex(center, center, row);
+  border-radius: 80px;
+  border: 2px solid black;
+  background: white;
+}
+
+.tachado{
+  background: #cc5f5f;
+  text-decoration: line-through;
+}
+
+.centro{
+  .dimensiones(300px, 350px);
+  .setFlex(flex-start, center, column);
+  background: @center-col;
+}
+
+.bola{
+  .dimensiones(100px, 100px);
+  .setFlex(center, center, row);
+  margin-top: 40px;
+  border-radius: 80px;
+  font-size: 36px;
+  background: radial-gradient(circle at 50px 10px, white, grey);
+}
+
+.boton{
+  .dimensiones(140px, 30px);
+  margin-top: 40px;
+  background: @center-col;
+}
