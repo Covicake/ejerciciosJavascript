@@ -4,50 +4,33 @@ let elems = {
   clasificatoria: document.querySelector(".clasificatoria")
 }
 
-let equiposRestantes;
-let posiblesResultados;
+let equiposRestantes;  //Se va vaciando
+let posiblesResultados;  //Array con numero de goles ponderados segun su probabilidad. (Probabilidad arbitraria)
 let ronda = 1;  //Ronda actual del "torneo". Empieza a contar en 1.
 
-elems.boton.onclick = nuevoPartido;
+let partidos = [];  //En cada ronda se almacenan las parejas de equipos que se enfrentan y su resultado.
+let equipos = [];  //Objetos. Formato: Nombre: "String", Goles: Number, Derrotado: Boolean.
 
-let partidos =[]; /*
-  {equipoA: "", equipoB: "", resultado = []}, //Resultado ["1", "5"] (Goles equipoA, Goles equipoB).
-  {equipoA: "", equipoB: "", resultado = []},
-  {equipoA: "", equipoB: "", resultado = []},
-  {equipoA: "", equipoB: "", resultado = []},
-  {equipoA: "", equipoB: "", resultado = []}
-]; */
+let arrayEquipos = ["Alaves", "Athletic Bilbao", "Athletico Madrid", "Barcelona", "Celta de Vigo", "Deportivo La Coruña", "Eibar", "Espanyol"];
 
-let equipos = [
-  {nombre: "Alaves", goles: 0, derrotado: false},
-  {nombre: "Athletic Bilbao", goles: 0, derrotado: false},
-  {nombre: "Athletico Madrid", goles: 0, derrotado: false},
-  {nombre: "Barcelona", goles: 0, derrotado: false},
-  {nombre: "Celta de Vigo", goles: 0, derrotado: false},
-  {nombre: "Deportivo La Coruña", goles: 0, derrotado: false},
-  {nombre: "Eibar", goles: 0, derrotado: false},
-  {nombre: "Espanyol", goles: 0, derrotado: false},
-];
-
-
+function construirEquipos(){
+  equipos = [];
+  arrayEquipos.forEach((e, i)=>{ equipos.push({nombre: e, goles: 0, derrotado: false}) })
+}
 
 function decidirPartidos(){                      //Empareja los equipos en cada ronda
   for(let i in _.range(0, (equiposRestantes.length/2))){
     partidos.push({equipoA: elegirEquipo(), equipoB: elegirEquipo(), resultado: []});
-    partidos[i].resultado = decidirGanador(partidos[i].equipoA, partidos[i].equipoB);
+    partidos[i].resultado = decidirResultado(partidos[i].equipoA, partidos[i].equipoB);
   }
 }
 
 function elegirEquipo(){
-  /*let equipo;
-  do{
-    equipo = equiposRestantes.shift();       //En las rondas distintas de la primera, se omitirán los equipos derrotados en rondas anteriores.
-  }while(equipo.derrotado == true); */
   let equipo = equiposRestantes.shift();
    return equipo;
 }
 
-function decidirGanador(equipoA, equipoB){
+function decidirResultado(equipoA, equipoB){
   let ind = Math.floor(Math.random()*posiblesResultados.length);
   let ind2 = Math.floor(Math.random()*posiblesResultados.length);
 
@@ -61,29 +44,15 @@ function decidirGanador(equipoA, equipoB){
   return [equipoA.goles, equipoB.goles];
 }
 
-/*function decidirGoles(ganador){
-  let goles = [];
-  if (ganador == 0){                //Si A es el equipo ganador, obtendra un numero de goles aleatorio entre 0 y 4 y B obtendrá un numero entre 0 y goles de A.
-    equipoA.goles = Math.floor(Math.random()*4)+1;
-    equipoB.goles = Math.floor(Math.random()*equipoA.goles);
-  }else{
-    equipoB.goles = Math.floor(Math.random()*4)+1;
-    equipoA.goles = Math.floor((Math.random()*equipoB.goles));
-  }
-} */
-
 function setResultados(ronda){
   let nexov = document.createElement("div");
-  nexov.classList.add("nexoV");
-  nexov.classList.add(`v${ronda}`);
+  nexov.classList.add(`nexoV`, `v${ronda}`);
 
   let nexoh = document.createElement("div");
-  nexoh.classList.add("nexoH");
-  nexoh.classList.add(`h${ronda}`);
+  nexoh.classList.add(`nexoH`, `h${ronda}`);
 
   let fila = document.createElement("div");
-  fila.classList.add("fila");
-  fila.classList.add(`f${ronda}`);
+  fila.classList.add(`fila`, `f${ronda}`);
 
   elems.clasificatoria.appendChild(nexov);
   elems.clasificatoria.appendChild(nexoh);
@@ -93,15 +62,12 @@ function setResultados(ronda){
   elems[`h${ronda}`] = document.querySelector(`.h${ronda}`);
   elems[`f${ronda}`] = document.querySelector(`.f${ronda}`);
 
-  for(let i in [0, 1, 2, 3]){
+  for(let i in _.range(0, partidos.length)){
     let nexV = document.createElement("div");
     let nexH = document.createElement("div");
 
-    nexV.classList.add("nexo");
-    nexH.classList.add("nexo");
-
-    nexV.classList.add("V");
-    nexH.classList.add(`H${ronda}`);
+    nexV.classList.add(`nexo`, `V`);
+    nexH.classList.add(`nexo`, `H${ronda}`);
 
     elems[`v${ronda}`].appendChild(nexV);
     elems[`h${ronda}`].appendChild(nexH);
@@ -114,28 +80,59 @@ function setResultados(ronda){
     teamA.classList.add("equipo");
     teamB.classList.add("equipo");
 
-    teamA.textContent = e.equipoA.nombre;
-    teamB.textContent = e.equipoB.nombre;
+    teamA.textContent = `${e.equipoA.nombre} ${e.equipoA.goles}`;
+    teamB.textContent = `${e.equipoB.nombre} ${e.equipoB.goles}`;
 
     elems[`f${ronda}`].appendChild(teamA);
     elems[`f${ronda}`].appendChild(teamB);
   });
 }
 
-
 function nuevoPartido(){
-  partidos = [];
+  construirEquipos();
+  elems.clasificatoria.textContent = "";
   equiposRestantes = _.shuffle(equipos);
-  equiposRestantes = equiposRestantes.filter(e=>{   //Solo guarda los equipos que no estén derrotados.
-    if(e.derrotado===false)
-      return true;
-  });
   decidirPartidos();  //En cada ronda, empareja los equipos y decide el resultado del enfrentamiento.
   setResultados(ronda);
   ronda++;
+  elems.boton.onclick = siguienteRonda;
+  elems.boton.textContent = "Siguiente ronda";
 }
 
+function siguienteRonda(){
+  equiposRestantes = partidos.map(e =>{
+    let ganador;
+    if(e.equipoA.derrotado == false){
+      ganador = e.equipoA;
+    }else{
+      ganador = e.equipoB;
+    }
+    return ganador;
+  });
 
+  if(equiposRestantes.length == 1){
+    let fila = document.createElement("div");
+    fila.classList.add(`f${ronda}`);
+    elems.clasificatoria.appendChild(fila);
+
+    elems[`f${ronda}`] = document.querySelector(`.f${ronda}`);
+    let winner = document.createElement("div");
+    winner.classList.add("equipo");
+    winner.textContent = `${equiposRestantes[0].nombre} ${equiposRestantes[0].goles}`;
+    elems[`f${ronda}`].appendChild(winner);
+
+    elems.boton.onclick = nuevoPartido;
+    elems.boton.textContent = "Nuevo partido";
+    partidos = [];
+    ronda = 1;
+
+  }else{
+    partidos = [];
+    decidirPartidos();
+    setResultados(ronda);
+    ronda++;
+  }
+}
 
 function generarProbabilidades(){
   let ceros = _.fill(Array(20), 0);
@@ -145,6 +142,8 @@ function generarProbabilidades(){
   posiblesResultados = _.concat(ceros, unos, dos, tres);
   posiblesResultados = _.concat(posiblesResultados, [4, 5, 6, 7, 8, 9]);
   posiblesResultados = _.shuffle(posiblesResultados);
+
 }
 
 generarProbabilidades();  //Solo es necesario una vez (al iniciarse el programa).
+elems.boton.onclick = nuevoPartido;
